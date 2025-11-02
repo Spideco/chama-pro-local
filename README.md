@@ -1,6 +1,6 @@
 # 🔧 ChamaPro
 
-**ChamaPro** é um aplicativo mobile inspirado no layout e estrutura do iFood, mas voltado para conectar clientes a prestadores de serviços locais como marcenaria, elétrica, encanamento, jardinagem, costura, pintura, estética e muito mais.
+**ChamaPro** é um aplicativo mobile  voltado para conectar clientes a prestadores de serviços locais como marcenaria, elétrica, encanamento, jardinagem, costura, pintura, estética e muito mais.
 
 ## 📱 Sobre o Projeto
 
