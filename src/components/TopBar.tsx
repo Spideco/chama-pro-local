@@ -14,7 +14,7 @@ export const TopBar = () => {
         <div className="flex items-center justify-between px-4 py-3 max-w-2xl mx-auto">
           <button
             onClick={() => setIsLocationDialogOpen(true)}
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl border-2 border-border bg-card hover:bg-muted transition-smooth shadow-sm"
           >
             <MapPin className="w-5 h-5 text-primary" />
             <span className="text-sm font-bold text-foreground">
