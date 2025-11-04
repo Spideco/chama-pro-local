@@ -67,7 +67,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      <TopBar location="São Paulo, SP" />
+      <TopBar />
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-8">
         {/* Hero Banner */}
