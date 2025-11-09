@@ -18,7 +18,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        sans: ['Alata', 'ui-sans-serif', 'sans-serif', 'system-ui'],
+        serif: ['"Source Serif 4"', 'serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
