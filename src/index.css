@@ -12,8 +12,8 @@
 @layer base {
   :root {
     /* Brand Colors */
-    --background: oklch(0.1365 0.0093 258.3396);
-    --foreground: oklch(0.9219 0 0);
+    --background: 0 0% 100%;
+    --foreground: 207 58% 22%;
     
     --primary: 207 58% 22%; /* Azul #16385B */
     --primary-foreground: 0 0% 100%;
