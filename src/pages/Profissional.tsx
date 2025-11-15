@@ -3,7 +3,7 @@ import { ChevronLeft, Star, MapPin, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TopBar } from "@/components/TopBar";
 import { BottomBar } from "@/components/BottomBar";
-import { ChatButton } from "@/components/ChatButton";
+import { ChatButton } from "@/components/ChatButton"; // Importando o novo ChatButton
 import electricianBanner from "@/assets/electrician-banner.jpg";
 import carpenterBanner from "@/assets/carpenter-banner.jpg";
 import plumberBanner from "@/assets/plumber-banner.jpg";
@@ -139,7 +139,7 @@ const Profissional = () => {
             size="lg"
             className="w-full"
             label="Conversar Agora"
-            onClick={() => navigate("/conversas")}
+            onClick={() => navigate("/conversas")} // Placeholder action
           />
         </div>
       </main>

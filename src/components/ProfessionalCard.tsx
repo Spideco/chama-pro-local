@@ -1,6 +1,6 @@
 import { Star, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ChatButton } from "./ChatButton";
+import { ChatButton } from "./ChatButton"; // Importando o novo ChatButton
 
 interface ProfessionalCardProps {
   name: string;
