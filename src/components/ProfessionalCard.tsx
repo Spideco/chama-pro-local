@@ -55,7 +55,7 @@ export const ProfessionalCard = ({
           variant="secondary"
           size="sm"
           onClick={onChat}
-          className="mt-auto self-start gap-2"
+          className="mt-auto self-start gap-2 shadow-none" // Adicionado shadow-none
         >
           <MessageCircle className="w-4 h-4" />
           Conversar

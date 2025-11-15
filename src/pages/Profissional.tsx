@@ -137,7 +137,7 @@ const Profissional = () => {
           <Button
             variant="secondary"
             size="lg"
-            className="w-full h-14 text-lg gap-2"
+            className="w-full h-14 text-lg gap-2 shadow-none" // Adicionado shadow-none
           >
             <MessageCircle className="w-6 h-6" />
             Conversar Agora
