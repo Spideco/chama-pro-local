@@ -1,6 +1,6 @@
-import { Star, MapPin, MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Star, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChatButton } from "./ChatButton"; // Importando o novo ChatButton
 
 interface ProfessionalCardProps {
   name: string;
@@ -51,15 +51,12 @@ export const ProfessionalCard = ({
             <span>{distance}</span>
           </div>
         </div>
-        <Button
-          variant="secondary"
+        <ChatButton
           size="sm"
           onClick={onChat}
-          className="mt-auto self-start gap-2"
-        >
-          <MessageCircle className="w-4 h-4" />
-          Conversar
-        </Button>
+          className="mt-auto self-start"
+          label="Conversar"
+        />
       </div>
     </div>
   );

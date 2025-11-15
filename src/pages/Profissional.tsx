@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ChevronLeft, Star, MapPin, Heart, MessageCircle } from "lucide-react";
+import { ChevronLeft, Star, MapPin, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TopBar } from "@/components/TopBar";
 import { BottomBar } from "@/components/BottomBar";
+import { ChatButton } from "@/components/ChatButton"; // Importando o novo ChatButton
 import electricianBanner from "@/assets/electrician-banner.jpg";
 import carpenterBanner from "@/assets/carpenter-banner.jpg";
 import plumberBanner from "@/assets/plumber-banner.jpg";
@@ -134,14 +135,12 @@ const Profissional = () => {
           </div>
 
           {/* Chat Button */}
-          <Button
-            variant="secondary"
+          <ChatButton
             size="lg"
-            className="w-full h-14 text-lg gap-2"
-          >
-            <MessageCircle className="w-6 h-6" />
-            Conversar Agora
-          </Button>
+            className="w-full"
+            label="Conversar Agora"
+            onClick={() => navigate("/conversas")} // Placeholder action
+          />
         </div>
       </main>
 
