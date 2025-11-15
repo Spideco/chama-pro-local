@@ -11,16 +11,16 @@
 
 @layer base {
   :root {
-    /* Brand Colors (Light Mode) */
+    /* Brand Colors */
     --background: 0 0% 100%;
-    --foreground: 207 58% 22%; /* Azul Escuro */
+    --foreground: 207 58% 22%;
     
     --primary: 207 58% 22%; /* Azul #16385B */
-    --primary-foreground: 0 0% 100%; /* Branco */
+    --primary-foreground: 0 0% 100%;
     --primary-glow: 207 58% 30%;
     
     --secondary: 45 100% 59%; /* Amarelo #FFC72C */
-    --secondary-foreground: 207 58% 22%; /* Azul Escuro (para texto no amarelo) */
+    --secondary-foreground: 207 58% 22%;
     --secondary-glow: 45 100% 70%;
 
     --card: 0 0% 100%;
@@ -40,7 +40,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 207 58% 22%; /* Ring should be primary color (Blue) */
+    --ring: 207 58% 22%;
 
     --radius: 1rem;
     
@@ -80,9 +80,8 @@
   }
 
   .dark {
-    /* Brand Colors (Dark Mode) */
-    --background: 207 58% 10%; /* Azul Escuro Fundo */
-    --foreground: 0 0% 100%; /* Branco */
+    --background: 207 58% 10%;
+    --foreground: 0 0% 100%;
 
     --card: 207 58% 15%;
     --card-foreground: 0 0% 100%;
@@ -90,11 +89,11 @@
     --popover: 207 58% 15%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 207 58% 22%; /* Azul #16385B */
-    --primary-foreground: 0 0% 100%; /* Branco */
+    --primary: 45 100% 59%;
+    --primary-foreground: 207 58% 22%;
 
-    --secondary: 45 100% 59%; /* Amarelo #FFC72C */
-    --secondary-foreground: 207 58% 22%; /* Azul Escuro (para texto no amarelo) */
+    --secondary: 207 58% 22%;
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 207 58% 18%;
     --muted-foreground: 215 20.2% 65.1%;
@@ -107,7 +106,7 @@
 
     --border: 207 58% 25%;
     --input: 207 58% 25%;
-    --ring: 45 100% 59%; /* Ring should be secondary color (Yellow) in dark mode for contrast */
+    --ring: 45 100% 59%;
   }
 }
 
