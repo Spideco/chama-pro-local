@@ -52,6 +52,7 @@ export const ProfessionalCard = ({
           </div>
         </div>
         <ChatButton
+          variant="chip" // Usando a nova variante chip
           size="sm"
           onClick={onChat}
           className="mt-auto self-start"
