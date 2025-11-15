@@ -71,17 +71,7 @@ const Index = () => {
       <TopBar />
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-8">
-        {/* Hero Banner */}
-        <div className="gradient-hero rounded-3xl p-8 text-center shadow-lg">
-          <h1 className="text-3xl font-bold text-primary-foreground mb-2">
-            Bem-vindo ao ChamaPro
-          </h1>
-          <p className="text-primary-foreground/90 text-lg">
-            Encontre profissionais próximos de você
-          </p>
-        </div>
-
-        {/* Search Bar (New) */}
+        {/* Search Bar */}
         <div
           onClick={() => navigate("/busca")}
           className="relative cursor-pointer"
