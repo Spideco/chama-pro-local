@@ -10,6 +10,7 @@ import {
   Laptop,
   Trash2,
   MoreHorizontal,
+  Search, // Importando o ícone de busca
 } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
 import { BottomBar } from "@/components/BottomBar";
@@ -78,6 +79,19 @@ const Index = () => {
           <p className="text-primary-foreground/90 text-lg">
             Encontre profissionais próximos de você
           </p>
+        </div>
+
+        {/* Search Bar (New) */}
+        <div
+          onClick={() => navigate("/busca")}
+          className="relative cursor-pointer"
+        >
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground">
+            <Search className="w-5 h-5" />
+          </div>
+          <div className="flex items-center h-14 pl-12 pr-4 text-base rounded-2xl shadow-md bg-card border border-input text-muted-foreground hover:bg-muted transition-colors">
+            O que você procura?
+          </div>
         </div>
 
         {/* Categories Grid */}
