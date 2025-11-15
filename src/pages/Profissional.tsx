@@ -96,7 +96,7 @@ const Profissional = () => {
 
             <div className="flex items-center gap-6 text-sm">
               <div className="flex items-center gap-1">
-                <Star className="w-5 h-5 text-secondary fill-secondary" />
+                <Star className="w-5 h-5 text-primary fill-primary" />
                 <span className="font-bold text-lg">{professional.rating}</span>
                 <span className="text-muted-foreground">
                   ({professional.reviewCount} avaliações)

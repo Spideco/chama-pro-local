@@ -42,7 +42,7 @@ export const ProfessionalCard = ({
         </div>
         <div className="flex items-center gap-3 text-sm">
           <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 text-secondary fill-secondary" />
+            <Star className="w-4 h-4 text-primary fill-primary" />
             <span className="font-bold">{rating.toFixed(1)}</span>
             <span className="text-muted-foreground">({reviewCount})</span>
           </div>
