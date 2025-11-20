@@ -1,15 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Hammer,
-  Zap,
-  Wrench,
-  PaintBucket,
-  Scissors,
-  Sparkles,
-  Laptop,
-  Trash2,
-  MoreHorizontal,
   Search, // Importando o ícone de busca
 } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
@@ -19,19 +10,7 @@ import { ProfessionalCard } from "@/components/ProfessionalCard";
 import electricianBanner from "@/assets/electrician-banner.jpg";
 import carpenterBanner from "@/assets/carpenter-banner.jpg";
 import plumberBanner from "@/assets/plumber-banner.jpg";
-import painterBanner from "@/assets/painter-banner.jpg";
-
-const categories = [
-  { icon: Hammer, label: "Marcenaria", id: "marcenaria" },
-  { icon: Zap, label: "Eletricista", id: "eletricista" },
-  { icon: Wrench, label: "Encanador", id: "encanador" },
-  { icon: PaintBucket, label: "Pintor", id: "pintor" },
-  { icon: Scissors, label: "Costureira", id: "costureira" },
-  { icon: Sparkles, label: "Estética", id: "estetica" },
-  { icon: Laptop, label: "Informática", id: "informatica" },
-  { icon: Trash2, label: "Limpeza", id: "limpeza" },
-  { icon: MoreHorizontal, label: "Outros", id: "outros" },
-];
+import { categories } from "@/lib/categories"; // Importando categorias
 
 const mockProfessionals = [
   {

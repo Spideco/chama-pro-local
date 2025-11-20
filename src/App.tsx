@@ -10,6 +10,7 @@ import Conversas from "./pages/Conversas";
 import Perfil from "./pages/Perfil";
 import Categoria from "./pages/Categoria";
 import Profissional from "./pages/Profissional";
+import CadastroProfissional from "./pages/CadastroProfissional"; // Import new page
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/categoria/:id" element={<Categoria />} />
           <Route path="/profissional/:id" element={<Profissional />} />
+          <Route path="/cadastro-profissional" element={<CadastroProfissional />} /> {/* New Route */}
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

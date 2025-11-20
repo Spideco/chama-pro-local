@@ -1,9 +1,12 @@
-import { User, Settings, Star, Clock } from "lucide-react";
+import { User, Settings, Star, Clock, UserPlus } from "lucide-react";
 import { TopBar } from "@/components/TopBar";
 import { BottomBar } from "@/components/BottomBar";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Perfil = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="min-h-screen bg-background pb-20">
       <TopBar />
@@ -18,6 +21,14 @@ const Perfil = () => {
         </div>
 
         <div className="space-y-3">
+          <Button
+            variant="default"
+            className="w-full justify-start h-16 text-base"
+            onClick={() => navigate("/cadastro-profissional")}
+          >
+            <UserPlus className="w-5 h-5 mr-3" />
+            Quero ser um Profissional
+          </Button>
           <Button
             variant="outline"
             className="w-full justify-start h-16 text-base"
