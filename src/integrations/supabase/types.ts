@@ -280,6 +280,45 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews_public: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          id: string | null
+          professional_id: string | null
+          rating: number | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string | null
+          professional_id?: string | null
+          rating?: number | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string | null
+          professional_id?: string | null
+          rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never
