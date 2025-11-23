@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Busca from "./pages/Busca";
 import Favoritos from "./pages/Favoritos";
@@ -10,7 +12,8 @@ import Conversas from "./pages/Conversas";
 import Perfil from "./pages/Perfil";
 import Categoria from "./pages/Categoria";
 import Profissional from "./pages/Profissional";
-import CadastroProfissional from "./pages/CadastroProfissional"; // Import new page
+import CadastroProfissional from "./pages/CadastroProfissional";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,18 +24,20 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/busca" element={<Busca />} />
-          <Route path="/favoritos" element={<Favoritos />} />
-          <Route path="/conversas" element={<Conversas />} />
-          <Route path="/perfil" element={<Perfil />} />
-          <Route path="/categoria/:id" element={<Categoria />} />
-          <Route path="/profissional/:id" element={<Profissional />} />
-          <Route path="/cadastro-profissional" element={<CadastroProfissional />} /> {/* New Route */}
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+            <Route path="/busca" element={<ProtectedRoute><Busca /></ProtectedRoute>} />
+            <Route path="/favoritos" element={<ProtectedRoute><Favoritos /></ProtectedRoute>} />
+            <Route path="/conversas" element={<ProtectedRoute><Conversas /></ProtectedRoute>} />
+            <Route path="/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
+            <Route path="/categoria/:id" element={<ProtectedRoute><Categoria /></ProtectedRoute>} />
+            <Route path="/profissional/:id" element={<ProtectedRoute><Profissional /></ProtectedRoute>} />
+            <Route path="/cadastro-profissional" element={<ProtectedRoute><CadastroProfissional /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
