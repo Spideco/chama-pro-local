@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 // Define the schema for form validation
 const professionalSchema = z.object({
@@ -53,22 +54,82 @@ const CadastroProfissional = () => {
     }
 
     setIsSubmitting(true);
-    
-    // --- Placeholder for API Submission ---
-    console.log("Dados do Profissional:", data);
-    console.log("Arquivos de Fotos:", photos);
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("Usuário não autenticado");
+      }
 
-    // NOTE: In a real application, you would handle image upload and data persistence here.
-    
-    toast.success("Cadastro enviado para análise!", {
-      description: "Seu perfil será revisado e ativado em breve.",
-    });
+      // 1. Upload das imagens para o Supabase Storage
+      const uploadedImageUrls: string[] = [];
+      
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `${user.id}/${Date.now()}-${i}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('professional-images')
+          .upload(fileName, photo);
 
-    setIsSubmitting(false);
-    navigate("/perfil"); // Redirect to profile or home after submission
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('professional-images')
+          .getPublicUrl(fileName);
+
+        uploadedImageUrls.push(publicUrl);
+      }
+
+      // 2. Inserir registro do profissional
+      const { data: professionalData, error: professionalError } = await supabase
+        .from('professionals')
+        .insert({
+          user_id: user.id,
+          business_name: data.name,
+          category: data.serviceId,
+          description: data.about,
+        })
+        .select()
+        .single();
+
+      if (professionalError) throw professionalError;
+
+      // 3. Inserir as URLs das imagens
+      const imageInserts = uploadedImageUrls.map(url => ({
+        professional_id: professionalData.id,
+        image_url: url,
+      }));
+
+      const { error: imagesError } = await supabase
+        .from('professional_images')
+        .insert(imageInserts);
+
+      if (imagesError) throw imagesError;
+
+      // 4. Atualizar perfil do usuário para indicar que é profissional
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ is_professional: true })
+        .eq('id', user.id);
+
+      if (profileError) throw profileError;
+
+      toast.success("Cadastro concluído com sucesso!", {
+        description: "Seu perfil profissional foi criado e já está disponível.",
+      });
+
+      navigate("/perfil");
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+      toast.error("Erro ao cadastrar profissional", {
+        description: "Ocorreu um erro ao enviar o cadastro. Tente novamente.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
