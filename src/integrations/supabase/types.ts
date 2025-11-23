@@ -41,6 +41,13 @@ export type Database = {
             referencedRelation: "professionals"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "favorites_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       messages: {
@@ -100,11 +107,19 @@ export type Database = {
             referencedRelation: "professionals"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "professional_images_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       professionals: {
         Row: {
           address: string | null
+          address_consent: boolean | null
           business_name: string
           category: string
           city: string | null
@@ -121,6 +136,7 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          address_consent?: boolean | null
           business_name: string
           category: string
           city?: string | null
@@ -137,6 +153,7 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          address_consent?: boolean | null
           business_name?: string
           category?: string
           city?: string | null
@@ -216,14 +233,65 @@ export type Database = {
             referencedRelation: "professionals"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "reviews_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "professionals_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
-      [_ in never]: never
+      professionals_public: {
+        Row: {
+          business_name: string | null
+          category: string | null
+          city: string | null
+          created_at: string | null
+          description: string | null
+          id: string | null
+          rating: number | null
+          state: string | null
+          total_reviews: number | null
+        }
+        Insert: {
+          business_name?: string | null
+          category?: string | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          rating?: number | null
+          state?: string | null
+          total_reviews?: number | null
+        }
+        Update: {
+          business_name?: string | null
+          category?: string | null
+          city?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string | null
+          rating?: number | null
+          state?: string | null
+          total_reviews?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      get_professional_location: {
+        Args: { professional_id: string }
+        Returns: {
+          address: string
+          city: string
+          latitude: number
+          longitude: number
+          state: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
