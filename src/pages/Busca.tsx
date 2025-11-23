@@ -1,42 +1,54 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { TopBar } from "@/components/TopBar";
 import { BottomBar } from "@/components/BottomBar";
 import { Input } from "@/components/ui/input";
 import { ProfessionalCard } from "@/components/ProfessionalCard";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import electricianBanner from "@/assets/electrician-banner.jpg";
-import carpenterBanner from "@/assets/carpenter-banner.jpg";
-
-const allProfessionals = [
-  {
-    id: 1,
-    name: "Carlos Silva",
-    service: "Eletricista Residencial",
-    rating: 4.9,
-    reviewCount: 127,
-    distance: "1.2 km",
-    image: electricianBanner,
-  },
-  {
-    id: 2,
-    name: "João Santos",
-    service: "Marceneiro Profissional",
-    rating: 4.8,
-    reviewCount: 95,
-    distance: "2.5 km",
-    image: carpenterBanner,
-  },
-];
 
 const Busca = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
+  const { data: allProfessionals = [], isLoading } = useQuery({
+    queryKey: ['professionals-search'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('professionals_public')
+        .select('*')
+        .order('rating', { ascending: false });
+
+      if (error) throw error;
+
+      // Buscar primeira imagem de cada profissional
+      const professionalsWithImages = await Promise.all(
+        (data || []).map(async (prof) => {
+          const { data: images } = await supabase
+            .from('professional_images')
+            .select('image_url')
+            .eq('professional_id', prof.id)
+            .limit(1)
+            .single();
+
+          return {
+            ...prof,
+            image: images?.image_url || electricianBanner,
+          };
+        })
+      );
+
+      return professionalsWithImages;
+    },
+  });
+
   const filteredProfessionals = allProfessionals.filter(
     (prof) =>
-      prof.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      prof.service.toLowerCase().includes(searchQuery.toLowerCase())
+      prof.business_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      prof.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (prof.description && prof.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -55,22 +67,33 @@ const Busca = () => {
           />
         </div>
 
-        <div className="space-y-3">
-          {filteredProfessionals.map((professional) => (
-            <ProfessionalCard
-              key={professional.id}
-              {...professional}
-              onChat={() => navigate(`/profissional/${professional.id}`)}
-            />
-          ))}
-          {filteredProfessionals.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">
-                Nenhum resultado encontrado
-              </p>
-            </div>
-          )}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-12 text-muted-foreground">
+            Carregando...
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {filteredProfessionals.map((professional) => (
+              <ProfessionalCard
+                key={professional.id}
+                name={professional.business_name}
+                service={professional.category}
+                rating={professional.rating || 0}
+                reviewCount={professional.total_reviews || 0}
+                distance={professional.city || "Localização não informada"}
+                image={professional.image}
+                onChat={() => navigate(`/profissional/${professional.id}`)}
+              />
+            ))}
+            {filteredProfessionals.length === 0 && !isLoading && (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">
+                  {searchQuery ? "Nenhum resultado encontrado" : "Digite algo para buscar"}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </main>
 
       <BottomBar />

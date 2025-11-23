@@ -1,66 +1,53 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { TopBar } from "@/components/TopBar";
 import { BottomBar } from "@/components/BottomBar";
 import { ProfessionalCard } from "@/components/ProfessionalCard";
+import { supabase } from "@/integrations/supabase/client";
 import electricianBanner from "@/assets/electrician-banner.jpg";
-import carpenterBanner from "@/assets/carpenter-banner.jpg";
-import plumberBanner from "@/assets/plumber-banner.jpg";
-
-const categoryData: Record<string, { title: string; professionals: any[] }> = {
-  eletricista: {
-    title: "Eletricistas",
-    professionals: [
-      {
-        id: 1,
-        name: "Carlos Silva",
-        service: "Eletricista Residencial",
-        rating: 4.9,
-        reviewCount: 127,
-        distance: "1.2 km",
-        image: electricianBanner,
-      },
-    ],
-  },
-  marcenaria: {
-    title: "Marceneiros",
-    professionals: [
-      {
-        id: 2,
-        name: "João Santos",
-        service: "Marceneiro Profissional",
-        rating: 4.8,
-        reviewCount: 95,
-        distance: "2.5 km",
-        image: carpenterBanner,
-      },
-    ],
-  },
-  encanador: {
-    title: "Encanadores",
-    professionals: [
-      {
-        id: 3,
-        name: "Pedro Costa",
-        service: "Encanador 24h",
-        rating: 4.7,
-        reviewCount: 83,
-        distance: "1.8 km",
-        image: plumberBanner,
-      },
-    ],
-  },
-};
+import { categories } from "@/lib/categories";
 
 const Categoria = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const category = categoryData[id || ""] || {
-    title: "Serviços",
-    professionals: [],
-  };
+  const category = categories.find(c => c.id === id);
+  const categoryTitle = category?.label || "Serviços";
+
+  const { data: professionals = [], isLoading } = useQuery({
+    queryKey: ['professionals', id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('professionals_public')
+        .select('*')
+        .eq('category', id)
+        .order('rating', { ascending: false });
+
+      if (error) throw error;
+
+      // Buscar primeira imagem de cada profissional
+      const professionalsWithImages = await Promise.all(
+        (data || []).map(async (prof) => {
+          const { data: images } = await supabase
+            .from('professional_images')
+            .select('image_url')
+            .eq('professional_id', prof.id)
+            .limit(1)
+            .single();
+
+          return {
+            ...prof,
+            image: images?.image_url || electricianBanner,
+          };
+        })
+      );
+
+      return professionalsWithImages;
+    },
+    enabled: !!id,
+  });
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -77,26 +64,37 @@ const Categoria = () => {
             <ChevronLeft className="w-6 h-6" />
           </Button>
           <h1 className="text-2xl font-bold text-foreground">
-            {category.title}
+            {categoryTitle}
           </h1>
         </div>
 
-        <div className="space-y-3">
-          {category.professionals.map((professional) => (
-            <ProfessionalCard
-              key={professional.id}
-              {...professional}
-              onChat={() => navigate(`/profissional/${professional.id}`)}
-            />
-          ))}
-          {category.professionals.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">
-                Nenhum profissional encontrado nesta categoria
-              </p>
-            </div>
-          )}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-12 text-muted-foreground">
+            Carregando profissionais...
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {professionals.map((professional) => (
+              <ProfessionalCard
+                key={professional.id}
+                name={professional.business_name}
+                service={professional.category}
+                rating={professional.rating || 0}
+                reviewCount={professional.total_reviews || 0}
+                distance={professional.city || "Localização não informada"}
+                image={professional.image}
+                onChat={() => navigate(`/profissional/${professional.id}`)}
+              />
+            ))}
+            {professionals.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">
+                  Nenhum profissional encontrado nesta categoria
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </main>
 
       <BottomBar />
