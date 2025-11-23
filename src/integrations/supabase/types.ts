@@ -282,16 +282,7 @@ export type Database = {
       }
     }
     Functions: {
-      get_professional_location: {
-        Args: { professional_id: string }
-        Returns: {
-          address: string
-          city: string
-          latitude: number
-          longitude: number
-          state: string
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
