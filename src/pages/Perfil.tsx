@@ -58,7 +58,7 @@ const Perfil = () => {
             Configurações
           </Button>
           <Button
-            variant="destructive"
+            variant="outline"
             className="w-full justify-start h-16 text-base"
             onClick={signOut}
           >
