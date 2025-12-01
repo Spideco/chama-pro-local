@@ -1,44 +1,42 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="pt-BR" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>ChamaPro - Seu App de Serviços</title>
-    <meta name="description" content="Conecte-se com profissionais qualificados de marcenaria, elétrica, encanamento e muito mais.">
+    <meta name="description" content="Conecte-se com profissionais qualificados de marcenaria, elétrica, encanamento e muito mais." />
     <meta name="author" content="ChamaPro" />
-    <meta name="keywords" content="serviços locais, profissionais, marcenaria, elétrica, encanamento, pintura, estética">
-
+    <meta name="keywords" content="serviços locais, profissionais, marcenaria, elétrica, encanamento, pintura, estética" />
     
-    
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/NTtxz7O1apUKoFfW2kC1J45AnIH3/social-images/social-1764544486221-Logo 1.png">
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@chamapro" />
-    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/NTtxz7O1apUKoFfW2kC1J45AnIH3/social-images/social-1764544486221-Logo 1.png">
-    
-    <meta name="theme-color" content="#16385B" />
+    <!-- PWA Essential -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/pwa-icon.svg" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="ChamaPro" />
+    <meta name="application-name" content="ChamaPro" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-TileColor" content="#16385B" />
+    <meta name="msapplication-TileImage" content="/pwa-icon.svg" />
+    <meta name="theme-color" content="#16385B" />
     
-  
-  
-  
-  <link rel="icon" type="image/x-icon" href="https://storage.googleapis.com/gpt-engineer-file-uploads/NTtxz7O1apUKoFfW2kC1J45AnIH3/uploads/1764544458331-Logo Web.png">
-  
-  
-  
-  
-  
-  
-  
-  
-  <meta property="og:title" content="ChamaPro - Seu App de Serviços">
-  <meta name="twitter:title" content="ChamaPro - Seu App de Serviços">
-  <meta property="og:description" content="Conecte-se com profissionais qualificados de marcenaria, elétrica, encanamento e muito mais.">
-  <meta name="twitter:description" content="Conecte-se com profissionais qualificados de marcenaria, elétrica, encanamento e muito mais.">
-</head>
-
+    <!-- CSP Seguro: self + Supabase + fonts/images essenciais -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; block-all-mixed-content; connect-src 'self' https://*.supabase.co https://nominatim.openstreetmap.org wss://*.supabase.co; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com; img-src 'self' data: blob: https:; object-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; media-src 'self' blob: https:; manifest-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'; form-action 'self';" />
+    
+    <!-- OG/Twitter existentes mantidos -->
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/NTtxz7O1apUKoFfW2kC1J45AnIH3/social-images/social-1764544486221-Logo 1.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@chamapro" />
+    <meta name="twitter:image" content="https://storage.googleapis.com/gpt-engineer-file-uploads/NTtxz7O1apUKoFfW2kC1J45AnIH3/social-images/social-1764544486221-Logo 1.png" />
+    <meta property="og:title" content="ChamaPro - Seu App de Serviços" />
+    <meta name="twitter:title" content="ChamaPro - Seu App de Serviços" />
+    <meta property="og:description" content="Conecte-se com profissionais qualificados de marcenaria, elétrica, encanamento e muito mais." />
+    <meta name="twitter:description" content="Conecte-se com profissionais qualificados de marcenaria, elétrica, encanamento e muito mais." />
+    
+    <!-- Favicon local -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
