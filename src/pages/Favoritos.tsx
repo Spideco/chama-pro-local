@@ -5,20 +5,24 @@ import { ProfessionalCard } from "@/components/ProfessionalCard";
 import { useNavigate } from "react-router-dom";
 import electricianBanner from "@/assets/electrician-banner.jpg";
 
-const favoriteProfessionals = [
-  {
-    id: 1,
-    name: "Carlos Silva",
-    service: "Eletricista Residencial",
-    rating: 4.9,
-    reviewCount: 127,
-    distance: "1.2 km",
-    image: electricianBanner,
-  },
-];
+// Removendo dados estáticos
+// const favoriteProfessionals = [
+//   {
+//     id: 1,
+//     name: "Carlos Silva",
+//     service: "Eletricista Residencial",
+//     rating: 4.9,
+//     reviewCount: 127,
+//     distance: "1.2 km",
+//     image: electricianBanner,
+//   },
+// ];
 
 const Favoritos = () => {
   const navigate = useNavigate();
+
+  // Removendo dados estáticos
+  // const favoriteProfessionals = [];
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -31,14 +35,16 @@ const Favoritos = () => {
         </div>
 
         <div className="space-y-3">
-          {favoriteProfessionals.map((professional) => (
+          {/* Removendo dados estáticos */}
+          {/* {favoriteProfessionals.map((professional) => (
             <ProfessionalCard
               key={professional.id}
               {...professional}
               onChat={() => navigate(`/profissional/${professional.id}`)}
             />
-          ))}
-          {favoriteProfessionals.length === 0 && (
+          ))} */}
+          {/* Exibindo mensagem caso não haja favoritos */}
+          {[]?.length === 0 && (
             <div className="text-center py-12">
               <Heart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground text-lg">
