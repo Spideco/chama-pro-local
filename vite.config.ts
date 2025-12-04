@@ -7,7 +7,7 @@ import dyadComponentTagger from '@dyad-sh/react-vite-component-tagger';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
-    host: "0.0.0.0", // Alterado de "::" para "0.0.0.0"
+    host: "::",
     port: 8080,
   },
   plugins: [dyadComponentTagger(), react(), mode === "development" && componentTagger()].filter(Boolean),

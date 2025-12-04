@@ -1,7 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import React from "react"; // Adicionando importação explícita do React
 
 // Registro PWA Service Worker (auto-update, offline-ready)
 async function registerSW() {
@@ -35,8 +34,4 @@ async function registerSW() {
 
 registerSW();
 
-createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+createRoot(document.getElementById("root")!).render(<App />);
