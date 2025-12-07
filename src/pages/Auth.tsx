@@ -17,6 +17,23 @@ import {
 } from "@/components/ui/dialog";
 import { Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { z } from "zod";
+
+// Zod validation schemas
+const loginSchema = z.object({
+  email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
+  password: z.string().min(6, "Mínimo 6 caracteres").max(72, "Senha muito longa"),
+});
+
+const signupSchema = z.object({
+  fullName: z.string().trim().min(2, "Nome muito curto").max(100, "Nome muito longo"),
+  email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
+  password: z.string().min(6, "Mínimo 6 caracteres").max(72, "Senha muito longa"),
+});
+
+const resetEmailSchema = z.object({
+  email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
+});
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -28,16 +45,46 @@ const Auth = () => {
   const [resetEmail, setResetEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
+  const validateForm = () => {
+    setErrors({});
+    
+    try {
+      if (isLogin) {
+        loginSchema.parse({ email, password });
+      } else {
+        signupSchema.parse({ fullName, email, password });
+      }
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            newErrors[err.path[0] as string] = err.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     setLoading(true);
 
     try {
       if (isLogin) {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(email.trim(), password);
         if (error) {
           if (error.message.includes("Invalid login credentials")) {
             toast.error("Email ou senha incorretos");
@@ -49,7 +96,7 @@ const Auth = () => {
           navigate("/");
         }
       } else {
-        const { error } = await signUp(email, password, fullName);
+        const { error } = await signUp(email.trim(), password, fullName.trim());
         if (error) {
           if (error.message.includes("User already registered")) {
             toast.error("Este email já está cadastrado");
@@ -69,9 +116,18 @@ const Auth = () => {
   };
 
   const handleForgotPassword = async () => {
+    try {
+      resetEmailSchema.parse({ email: resetEmail });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0]?.message || "Email inválido");
+      }
+      return;
+    }
+
     setIsResetting(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-      redirectTo: `${window.location.origin}/reset-password`, // Updated redirect URL
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail.trim(), {
+      redirectTo: `${window.location.origin}/reset-password`,
     });
     setIsResetting(false);
 
@@ -95,7 +151,7 @@ const Auth = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={isLogin ? "login" : "signup"} onValueChange={(v) => setIsLogin(v === "login")}>
+            <Tabs value={isLogin ? "login" : "signup"} onValueChange={(v) => { setIsLogin(v === "login"); setErrors({}); }}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="login">Entrar</TabsTrigger>
                 <TabsTrigger value="signup">Criar conta</TabsTrigger>
@@ -112,7 +168,9 @@ const Auth = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       disabled={loading}
+                      className={errors.email ? "border-destructive" : ""}
                     />
+                    {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">Senha</Label>
@@ -125,7 +183,7 @@ const Auth = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         disabled={loading}
-                        className="pr-10"
+                        className={`pr-10 ${errors.password ? "border-destructive" : ""}`}
                       />
                       <Button
                         type="button"
@@ -142,6 +200,7 @@ const Auth = () => {
                         )}
                       </Button>
                     </div>
+                    {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? (
@@ -177,7 +236,9 @@ const Auth = () => {
                       onChange={(e) => setFullName(e.target.value)}
                       required
                       disabled={loading}
+                      className={errors.fullName ? "border-destructive" : ""}
                     />
+                    {errors.fullName && <p className="text-sm text-destructive">{errors.fullName}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email-signup">Email</Label>
@@ -189,7 +250,9 @@ const Auth = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       disabled={loading}
+                      className={errors.email ? "border-destructive" : ""}
                     />
+                    {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password-signup">Senha</Label>
@@ -201,9 +264,8 @@ const Auth = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        minLength={6}
                         disabled={loading}
-                        className="pr-10"
+                        className={`pr-10 ${errors.password ? "border-destructive" : ""}`}
                       />
                       <Button
                         type="button"
@@ -220,6 +282,7 @@ const Auth = () => {
                         )}
                       </Button>
                     </div>
+                    {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
                   </div>
                   <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? (
