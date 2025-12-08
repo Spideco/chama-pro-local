@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,12 +9,68 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 const ResetPassword = () => {
-  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isValidSession, setIsValidSession] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Escuta o evento de mudança de autenticação
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log("Auth event:", event);
+        
+        if (event === "PASSWORD_RECOVERY") {
+          // O usuário clicou no link de recuperação - sessão válida
+          setIsValidSession(true);
+          setIsLoading(false);
+        } else if (event === "SIGNED_IN" && session) {
+          // Verifica se há um hash de recovery na URL
+          const hashParams = new URLSearchParams(window.location.hash.substring(1));
+          const type = hashParams.get("type");
+          
+          if (type === "recovery") {
+            setIsValidSession(true);
+          } else {
+            // Usuário logado normalmente, não está em fluxo de recovery
+            setIsValidSession(!!session);
+          }
+          setIsLoading(false);
+        } else if (session) {
+          // Sessão existente
+          setIsValidSession(true);
+          setIsLoading(false);
+        }
+      }
+    );
+
+    // Verifica sessão existente
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      // Verifica se há parâmetros de recovery na URL
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const accessToken = hashParams.get("access_token");
+      const type = hashParams.get("type");
+      
+      if (accessToken && type === "recovery") {
+        // Supabase vai processar automaticamente e disparar PASSWORD_RECOVERY
+        return;
+      }
+      
+      if (session) {
+        setIsValidSession(true);
+      }
+      setIsLoading(false);
+    };
+
+    checkSession();
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,8 +88,6 @@ const ResetPassword = () => {
     setIsSubmitting(true);
 
     try {
-      // Supabase automaticamente define a sessão quando o usuário chega nesta página
-      // após clicar no link de reset. Usamos a sessão ativa para atualizar a senha.
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       });
@@ -43,7 +96,6 @@ const ResetPassword = () => {
         toast.error("Erro ao redefinir senha: " + error.message);
       } else {
         toast.success("Senha redefinida com sucesso!");
-        // Faz logout do usuário após o reset por segurança e redireciona para o login
         await supabase.auth.signOut();
         navigate("/auth");
       }
@@ -54,18 +106,17 @@ const ResetPassword = () => {
     }
   };
 
-  if (authLoading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
-  // Se o usuário não estiver logado, o link de reset pode ser inválido ou expirado.
-  if (!user) {
+  if (!isValidSession) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <Card className="w-full max-w-md text-center">
           <CardHeader>
             <CardTitle className="text-2xl">Link Inválido ou Expirado</CardTitle>
